@@ -1,0 +1,5 @@
+Dog    Chó
+Cat    Mèo
+Chicken    Gà
+Bird    Chim
+Fish    Cá
