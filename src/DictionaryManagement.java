@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 public class DictionaryManagement {
@@ -52,7 +54,7 @@ public class DictionaryManagement {
                     break;
                 }
                 count++;
-                String txt[] = line.split("\\s+");
+                String txt[] = line.split("    ");
                 Word word = new Word();
                 word.setWord_target(txt[0]);
                 word.setWord_explain(txt[1]);
@@ -94,6 +96,108 @@ public class DictionaryManagement {
             System.out.println("NOT FOUND!");
         }
     }
+
+    /**
+     * Ham them du lieu tu dong lenh.
+     */
+    public  void addTailWord() {
+        Scanner sc = new Scanner(System.in);
+        //Thong bao
+        System.out.println("ADD WORD:");
+        System.out.println("Please Enter the word target:");
+        String new_target = sc.nextLine();
+        System.out.println("Please Enter the word explain:");
+        String new_explain = sc.nextLine();
+
+        dic.setCount_word(dic.getCount_word() + 1);
+        Word word = new Word();
+        word.setWord_target(new_target);
+        word.setWord_explain(new_explain);
+        dic.setWords(word, dic.getCount_word() - 1);
+
+        System.out.println("ADD WORD SUCCESS...");
+    }
+
+    /**
+     * Hàm sửa dữ liệu bằng dòng lệnh (thay đổi nghĩa của từ).
+     */
+    public void edit_data() {
+        Scanner sc = new Scanner(System.in);
+
+        //Thong bao
+        System.out.println("CHANGE WORD:");
+        System.out.println("Please Enter the word target:");
+        String new_target = sc.nextLine();
+        System.out.println("Please Enter the word explain:");
+        String new_explain = sc.nextLine();
+
+        boolean check = false;
+
+        for (int i = 0; i < dic.getCount_word(); i++) {
+            if (dic.getWord(i).getWord_target().equals(new_target)) {
+                Word word = new Word();
+                word.setWord_target(new_target);
+                word.setWord_explain(new_explain);
+                dic.setWords(word, i);
+                check = true;
+            }
+        }
+        if (check){
+            System.out.println("COMPLETED THE CHANGE...");
+        }
+        else {
+            System.out.println("CAN NOT FIND THE WORD...");
+        }
+    }
+
+    /**
+     * Hàm xóa dữ liệu bằng dòng lệnh (xóa từ);
+     */
+    public void deleteWord(){
+        ///Thong bao
+        System.out.println("DELETE WORD:");
+        System.out.println("Please Enter the word:");
+
+        Scanner sc = new Scanner(System.in);
+
+        boolean check = false;
+
+        String target = sc.nextLine();
+        for (int i = 0; i < dic.getCount_word(); i++) {
+            if (dic.getWord(i).getWord_target().equals(target)) {
+                for (int j = i; j < dic.getCount_word(); j++) {
+                    dic.setWords(dic.getWord(j+1), j );
+                }
+                dic.setCount_word(dic.getCount_word() - 1);
+                check = true;
+                break;
+            }
+        }
+
+        if (check){
+            System.out.println("COMPLETED DELETE THE WORD...");
+        }
+        else {
+            System.out.println("CAN NOT FIND THE WORD...");
+        }
+    }
+
+    /**
+     * Xuất dữ liệu từ điển hiện tại ra file.
+     */
+    public void dictionaryExportToFile() {
+       try {
+            FileWriter fw = new FileWriter("Data\\dictionaries.txt");
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (int i = 0; i < dic.getCount_word(); i++) {
+                bw.write(dic.getWord(i).getWord_target() + "    " + dic.getWord(i).getWord_explain() + "\n");
+            }
+            bw.close();
+            fw.close();
+       } catch (Exception e) {}
+        System.out.println("Export to file done!");
+    }
+
 }
 
 
